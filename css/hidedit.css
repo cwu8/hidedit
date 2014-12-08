@@ -25,14 +25,14 @@
 	border: 1px solid black;
 	display: inline-block;
 }
-#loading DIV
+#loading div
 {
 	width: 20px;
 	height: 20px;
 	background: white;
 	display: inline-block;
 }
-#loading DIV.done
+#loading div.done
 {
 	background: blue;
 }
@@ -41,14 +41,14 @@
  * Toolbar  *
  ************/
 
-#toolbar 
+#toolbar
 {
     width: 100%;
     border-bottom: 1px solid black;
     padding: 3px;
     background: #c0c0c0;
 }
-DIV.tbbtn
+div.tbbtn
 {
     width: 32px;
     height: 32px;
@@ -58,19 +58,19 @@ DIV.tbbtn
     border-right: 2px solid #808080;
     margin-right: 2px;
     padding: 0px;
-    background-image: url('toolbar.png');
+    background-image: url('../images/toolbar.png');
     display: inline-block;
 }
-DIV.pressed
+div.pressed
 {
     border-bottom: 1px solid white;
     border-right: 1px solid white;
     border-top: 2px solid #808080;
     border-left: 2px solid #808080;
 }
-DIV.disabled
+div.disabled
 {
-    background-image: url('toolbar-disabled.png');	
+    background-image: url('../images/toolbar-disabled.png');
 }
 
 /******************
@@ -111,7 +111,7 @@ DIV.disabled
 /***************
  * Report view *
  ***************/
-DIV.report
+div.report
 {
     display: inline-block;
     border: 1px solid black;
@@ -119,20 +119,20 @@ DIV.report
     margin-right: 10px;
 }
 
-DIV.reportError
+div.reportError
 {
     display: inline-block;
     border: 1px solid red;
     padding: 10px;
 }
 
-DIV.report P
+div.report p
 {
     padding: 0px;
     margin: 0px 10px 0px 10px;
 }
 
-DIV.report P.Type
+div.report p.Type
 {
     text-align: center;
     font-weight: bold;
@@ -144,7 +144,7 @@ DIV.report P.Type
 /**********
  * Dialog *
  **********/
-DIV.DialogParent
+div.DialogParent
 {
 	position: absolute;
 	background: rgba(128, 128, 128, 0.6);
@@ -163,7 +163,7 @@ DIV.DialogParent
 {
 	display: inline-block;
 }
-DIV.Dialog
+div.Dialog
 {
 	display: inline-block;
 	width: 300px;
@@ -202,11 +202,11 @@ DIV.Dialog
     margin-top: 2px;
     margin-right: 2px;
     padding: 0px;
-    background-image: url('toolbar.png');
+    background-image: url('../images/toolbar.png');
     background-position: -256px 0px;
     display: inline-block;
     float: right;
 }
-DIV.ItemTypeData
+div.ItemTypeData
 {
 }

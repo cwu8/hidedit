@@ -49,7 +49,7 @@ Reports.prototype.show = function (reports) {
         elem.textContent = report.type.name + " report";
         reportElem.appendChild(elem);
 
-        if (report.getID() != null) {
+        if (report.getID()) {
             elem = document.createElement('P');
             elem.className = "ID";
             elem.textContent = "ID: " + report.getID();
@@ -85,7 +85,7 @@ Reports.prototype.show = function (reports) {
             tr = document.createElement('TR');
 
             td = document.createElement('TD');
-            if (entry.usage != null)
+            if (entry.usage !== null)
                 td.textContent = entry.usage.name;
             else
                 td.textContent = "Unused";

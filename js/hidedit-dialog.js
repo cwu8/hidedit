@@ -39,7 +39,7 @@ Dialog.prototype.initDialog = function (captionText, contentURL) {
 	var btn = document.createElement('DIV');
 	btn.className = "DialogCaptionButton";
 	btn.dlg = this;
-	btn.onclick = function () { this.dlg.ui.onCancel() };
+	btn.onclick = function () { this.dlg.ui.onCancel(); };
 	btn.onmousedown = function () { addClass(this, "pressed"); };
 	btn.onmouseup = function () { delClass(this, "pressed"); };
 	btn.onmouseout = function () { delClass(this, "pressed"); };
@@ -51,12 +51,12 @@ Dialog.prototype.initDialog = function (captionText, contentURL) {
 	this.item.appendChild(this.content);
 
 	document.body.appendChild(this.dlgParent);
-}
+};
 
 Dialog.prototype.setSize = function (width, height) {
 	this.item.style.width = width + "px";
 	this.item.style.height = height + "px";
-}
+};
 
 Dialog.prototype.show = function (data) {
 	this.ui.data = data;
@@ -76,24 +76,24 @@ EditItemDialogUI = function (onOK) {
 	this.itemType = null;
 	this.selectedItemTypeData = null;
 	this.onOK = onOK;
-}
+};
 
 EditItemDialogUI.prototype.setDlg = function (dlg) {
 	this.dlg = dlg;
-}
+};
 
 EditItemDialogUI.prototype.initUI = function () {
 	var btn = this.dlg.content.contentDocument.getElementById("btnOK");
 	btn.dlgui = this;
-	btn.onclick = function () { this.dlgui.onOK() };
-	var btn = this.dlg.content.contentDocument.getElementById("btnCancel");
+	btn.onclick = function () { this.dlgui.onOK(); };
+	btn = this.dlg.content.contentDocument.getElementById("btnCancel");
 	btn.dlgui = this;
-	btn.onclick = function () { this.dlgui.onCancel() };
+	btn.onclick = function () { this.dlgui.onCancel(); };
 
 	// "Item" drop-down list
 	this.itemType = this.dlg.content.contentDocument.getElementById("ItemType");
 	this.itemType.dlgui = this;
-	this.itemType.onchange = function () { this.dlgui.onItemTypeChange(this) };
+	this.itemType.onchange = function () { this.dlgui.onItemTypeChange(this); };
 	// Clear the item type list
 	while (this.itemType.childNodes.length > 0)
 		this.itemType.removeChild(this.itemType.childNodes[0]);
@@ -120,11 +120,11 @@ EditItemDialogUI.prototype.initUI = function () {
 
 		this.itemType.appendChild(group);
 	}
-}
+};
 
 EditItemDialogUI.prototype.onCancel = function () {
 	this.dlg.close(false);
-}
+};
 
 EditItemDialogUI.prototype.onItemTypeChange = function () {
 	var div = this.dlg.content.contentDocument.getElementById("ItemTypeData");
@@ -148,7 +148,7 @@ EditItemDialogUI.prototype.onItemTypeChange = function () {
 		case HIDItemLocalTag.Usage:
 		case HIDItemLocalTag.UsageMinimum:
 		case HIDItemLocalTag.UsageMaximum:
-			if (this.data.usagePage != null)
+			if (this.data.usagePage !== null)
 				this.initUISelect(div, this.data.usagePage.usage, "Usage: ", "From Usage-Page: " + this.data.usagePage.name);
 			else
 				this.initUINone(div, "No usage page selected");
@@ -176,17 +176,17 @@ EditItemDialogUI.prototype.onItemTypeChange = function () {
 		default:
 			this.initUINone(div, "This item type has no properties");
 	}
-}
+};
 
 EditItemDialogUI.prototype.initUINone = function (div, commentText) {
-	if (commentText != null) {
+	if (commentText !== null) {
 		var comment = this.dlg.content.contentDocument.createElement("TextNode");
 		comment.textContent = commentText;
 		comment.className = "Comment";
 		div.appendChild(comment);
 	}
-	this.getUIData = function () { return 0; }
-}
+	this.getUIData = function () { return 0; };
+};
 
 EditItemDialogUI.prototype.initUINum = function (div, labelText) {
 	var label = this.dlg.content.contentDocument.createElement("LABEL");
@@ -202,8 +202,8 @@ EditItemDialogUI.prototype.initUINum = function (div, labelText) {
 
 	editbox.value = this.data.data;
 
-	this.getUIData = function () { return parseInt(this.dlg.content.contentDocument.getElementById("typeDataNum").value); }
-}
+	this.getUIData = function () { return parseInt(this.dlg.content.contentDocument.getElementById("typeDataNum").value); };
+};
 
 EditItemDialogUI.prototype.initUISelect = function (div, enumType, labelText, commentText) {
 	var label = this.dlg.content.contentDocument.createElement("LABEL");
@@ -216,8 +216,9 @@ EditItemDialogUI.prototype.initUISelect = function (div, enumType, labelText, co
 	select.id = label.htmlFor;
 	div.appendChild(select);
 
-	if (enumType != null) {
+	if (enumType !== null) {
 		for (var typeName in enumType) {
+		    var option;
 			var type = enumType[typeName];
 			if (typeof type !== 'object')
 				continue;
@@ -228,14 +229,14 @@ EditItemDialogUI.prototype.initUISelect = function (div, enumType, labelText, co
 				if (valueTo > valueFrom + 100)
 					valueTo = valueFrom + 100;
 				for (var value = valueFrom; value <= valueTo; value++) {
-					var option = this.dlg.content.contentDocument.createElement("OPTION");
+					option = this.dlg.content.contentDocument.createElement("OPTION");
 					option.value = value;
 					option.textContent = dec2hex(value, 2) + ": " + type.name;
 					select.appendChild(option);
 				}
 			}
 			else {
-				var option = this.dlg.content.contentDocument.createElement("OPTION");
+				option = this.dlg.content.contentDocument.createElement("OPTION");
 				option.value = type.value;
 				option.textContent = dec2hex(type.value, 2) + ": " + type.name;
 				select.appendChild(option);
@@ -250,7 +251,7 @@ EditItemDialogUI.prototype.initUISelect = function (div, enumType, labelText, co
 		}
 	}
 
-	if (commentText != null) {
+	if (commentText !== null) {
 		var br = this.dlg.content.contentDocument.createElement("BR");
 		div.appendChild(br);
 
@@ -263,8 +264,8 @@ EditItemDialogUI.prototype.initUISelect = function (div, enumType, labelText, co
 	this.getUIData = function () {
 		var select = this.dlg.content.contentDocument.getElementById("typeDataSelect");
 		return parseInt(select.options[select.selectedIndex].value);
-	}
-}
+	};
+};
 
 EditItemDialogUI.prototype.initUICollection = function (div) {
 	var collType = parseEnum(this.data.data, HIDItemCollectionType);
@@ -295,8 +296,9 @@ EditItemDialogUI.prototype.initUICollection = function (div) {
 			editbox.type = "TEXT";
 			editbox.name = "otherValue";
 			editbox.id = "otherValue";
-			if (type == collType)
-				editbox.value = this.data.data
+			if (type == collType) {
+				editbox.value = this.data.data;
+			}
 			div.appendChild(editbox);
 		}
 		var br = this.dlg.content.contentDocument.createElement("BR");
@@ -307,24 +309,25 @@ EditItemDialogUI.prototype.initUICollection = function (div) {
 		var ret = 0;
 		for (var index = 0; index < div.childNodes.length; index++) {
 			var elem = div.childNodes[index];
-			if (elem.tagName != "INPUT")
+			if (elem.tagName != "INPUT") {
 				continue;
+			}
 			if (elem.checked) {
 				ret = parseInt(elem.value);
 				break;
 			}
 		}
 		return ret;
-	}
-}
+	};
+};
 
 EditItemDialogUI.prototype.initUIReport = function (div) {
 	// Input/Output/Feature radio buttons
 	// Fill the div with all known report attributes
-
+    var attr;
 	// TODO: quirk - Input main-item doesn't support the Volatile/NonVolatile bit 7 (it is reserved)
 	for (var attrName in HIDReportEntryAttribute) {
-		var attr = HIDReportEntryAttribute[attrName];
+		attr = HIDReportEntryAttribute[attrName];
 		if (typeof attr !== 'object')
 			continue;
 
@@ -349,7 +352,7 @@ EditItemDialogUI.prototype.initUIReport = function (div) {
 
 	var attrs = new HIDReportEntryAttributes(this.data.data);
 	for (var attrIndex = 0; attrIndex < attrs.attrs.length; attrIndex++) {
-		var attr = attrs.attrs[attrIndex];
+		attr = attrs.attrs[attrIndex];
 		this.dlg.content.contentDocument.getElementById(HIDReportEntryAttribute.name + "." + attr.name).checked = true;
 	}
 
@@ -366,23 +369,24 @@ EditItemDialogUI.prototype.initUIReport = function (div) {
 			ret |= elem.attr.value << elem.attr.bit;
 		}
 		return ret;
-	}
-}
+	};
+};
 
 EditItemDialogUI.prototype.initUIUnit = function (div, unit) {
 	// TODO:
 	// SELECT element for unit-system (list at HIDUnitSystem)
 	// Sliders(?) for exponents for each of the 6 units of the selected system (range -8 .. 7)
-}
+};
 
 EditItemDialogUI.prototype.loadData = function () {
 	var item = this.data;
-	if (item == null)
+	if (item === null)
 		return;
 
 	// "Item" drop-down list
 	var selectedTag = null;
 	for (var index = 0; index < this.itemType.options.length; index++) {
+	    /* jshint -W061 */
 		var tag = eval(this.itemType.options[index].value);
 		if (tag == item.tag) {
 			this.itemType.selectedIndex = index;
@@ -391,11 +395,11 @@ EditItemDialogUI.prototype.loadData = function () {
 		}
 	}
 	this.itemType.onchange();
-}
+};
 
 EditItemDialogUI.prototype.saveData = function () {
 	var item = this.data;
-	if (item == null)
+	if (item === null)
 		return;
 
 	var selectedOption = this.itemType.options[this.itemType.selectedIndex];
@@ -403,4 +407,4 @@ EditItemDialogUI.prototype.saveData = function () {
 	item.tag = selectedOption.tag;
 	item.type = group.type;
 	item.data = this.getUIData();
-}
+};

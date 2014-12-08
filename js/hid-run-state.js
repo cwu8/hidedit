@@ -24,8 +24,8 @@ HIDRunState.prototype.initState = function () {
     this.initGlobalState();
     this.initLocalState();
 
-    this.usageQueue = new Array();
-}
+    this.usageQueue = [];
+};
 
 HIDRunState.prototype.initGlobalState = function () {
     this.usagePage = null;
@@ -38,7 +38,7 @@ HIDRunState.prototype.initGlobalState = function () {
     this.repSize = null;
     this.repID = null;
     this.repCount = null;
-}
+};
 
 HIDRunState.prototype.initLocalState = function () {
     this.usage = null;
@@ -51,19 +51,19 @@ HIDRunState.prototype.initLocalState = function () {
     this.strMin = null;
     this.strMax = null;
     this.delim = null;
-}
+};
 
 HIDRunState.prototype.dequeueUsage = function () {
     if (this.usageQueue.length < 1)
         return null;
     var usage = this.usageQueue.shift();
     return usage;
-}
+};
 
 HIDRunState.prototype.handleNewState = function () {
     // Add usage min/max to usage queue
-    if ((this.usageMin !== null) && (this.usageMax !== null) && (this.usagePage != null)) {
-        if (this.usagePage.usage == null)
+    if ((this.usageMin !== null) && (this.usageMax !== null) && (this.usagePage !== null)) {
+        if (this.usagePage.usage === null)
             throw "Usage page " + this.usagePage.name + " does not contain usages";
         var num;
         for (num = this.usageMin.value; num <= this.usageMax.value; num++) {
@@ -74,17 +74,17 @@ HIDRunState.prototype.handleNewState = function () {
         this.usageMax = null;
     }
     // Add single usage to usage queue
-    if (this.usage != null) {
+    if (this.usage !== null) {
         this.usageQueue.push(this.usage);
         this.usage = null;
     }
-}
+};
 
 HIDRunState.prototype.clone = function () {
     var ret = new HIDRunState();
     ret.assignFrom(this);
     return ret;
-}
+};
 
 HIDRunState.prototype.assignLocalState = function (other) {
     // Copy local state
@@ -98,7 +98,7 @@ HIDRunState.prototype.assignLocalState = function (other) {
     this.strMin = other.strMin;
     this.strMax = other.strMax;
     this.delim = other.delim;
-}
+};
 
 HIDRunState.prototype.assignFrom = function (other) {
     // Copy global state
@@ -114,4 +114,4 @@ HIDRunState.prototype.assignFrom = function (other) {
     this.repCount = other.repCount;
 
     this.assignLocalState(other);
-}
+};

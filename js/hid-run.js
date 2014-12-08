@@ -23,7 +23,7 @@ function HIDCollection(type, state) {
 
 function HIDUnit(system) {
     this.system = system;
-    this.parts = new Array();
+    this.parts = [];
 }
 
 HIDUnit.prototype.makeDescription = function()
@@ -34,7 +34,7 @@ HIDUnit.prototype.makeDescription = function()
     for (var partIndex = 0; partIndex < this.parts.length; partIndex++)
     {
         var part = this.parts[partIndex];
-        if (part.exp == 0)
+        if (part.exp === 0)
             continue;
         if (ret.length > 0)
             ret += " * ";
@@ -42,7 +42,7 @@ HIDUnit.prototype.makeDescription = function()
     }
     ret = this.system.name + ": " + ret;
     return ret;
-}
+};
 
 function HIDRun(descriptor) {
     // Run's parameters
@@ -50,12 +50,12 @@ function HIDRun(descriptor) {
 
     // Run's report state
     this.state = new HIDRunState();
-    this.collectionStack = new Array();
+    this.collectionStack = [];
     // Run's internal state
     this.useReportIDs = false;
 
     // Run's output
-    this.reports = new Array();
+    this.reports = [];
 }
 
 HIDRun.prototype.findReportByTypeAndID = function (type, id) {
@@ -64,16 +64,16 @@ HIDRun.prototype.findReportByTypeAndID = function (type, id) {
 
         if (report.type != type)
             continue;
-        if ((report.id == 0) && (id == 0))
+        if ((report.id === 0) && (id === 0))
             return report;
-        if ((report.id != 0) && (id != 0) && (report.id == id))
+        if ((report.id !== 0) && (id !== 0) && (report.id == id))
             return report;
     }
 
-    var report = new HIDReport(type, id);
-    this.reports.push(report);
-    return report;
-}
+    var newReport = new HIDReport(type, id);
+    this.reports.push(newReport);
+    return newReport;
+};
 
 HIDRun.prototype.addToReport = function (item) {
     this.checkReportState();
@@ -84,7 +84,7 @@ HIDRun.prototype.addToReport = function (item) {
 
     // Revert back to collection's local state
     this.state.assignLocalState(this.collectionStack[this.collectionStack.length - 1].state);
-}
+};
 
 HIDRun.prototype.countItemsByTag = function (items, tag) {
     var count = 0;
@@ -94,7 +94,7 @@ HIDRun.prototype.countItemsByTag = function (items, tag) {
             count++;
     }
     return count;
-}
+};
 
 HIDRun.prototype.parseUnitExponent = function (val) {
     if ((val >= 0) && (val <= 7))
@@ -102,10 +102,10 @@ HIDRun.prototype.parseUnitExponent = function (val) {
     if ((val >= 8) && (val <= 15))
         return val - 16;
     throw "Invalid unit exponent value";
-}
+};
 
 HIDRun.prototype.parseUnit = function (data) {
-    var nibbles = new Array();
+    var nibbles = [];
     for (var nib = 0; nib < 8; nib++)
     {
         var value = data & 0x0F;
@@ -118,13 +118,13 @@ HIDRun.prototype.parseUnit = function (data) {
     var unitObject = new HIDUnit(system);
     for (nib = 1; nib < 7; nib++)
     {
-        var part = new Array();
+        var part = [];
         part.unit = system.units[nib];
         part.exp = this.parseUnitExponent(nibbles[nib]);
         unitObject.parts.push(part);
     }
     return unitObject;
-}
+};
 
 HIDRun.prototype.runItem = function (item) {
 	switch (item.tag) {
@@ -133,7 +133,7 @@ HIDRun.prototype.runItem = function (item) {
 			item.dataDesc = this.state.usagePage.name;
 			break;
 		case HIDItemLocalTag.Usage:
-			if (this.state.usagePage.usage == null)
+			if (this.state.usagePage.usage === null)
 				throw "Usage page " + this.state.usagePage.name + " does not contain usages";
 			item.usagePage = this.state.usagePage;
 
@@ -141,7 +141,7 @@ HIDRun.prototype.runItem = function (item) {
 			item.dataDesc = this.state.usage.name;
 			break;
 		case HIDItemLocalTag.UsageMinimum:
-			if (this.state.usagePage.usage == null)
+			if (this.state.usagePage.usage === null)
 				throw "Usage page " + this.state.usagePage.name + " does not contain usages";
 			item.usagePage = this.state.usagePage;
 
@@ -149,7 +149,7 @@ HIDRun.prototype.runItem = function (item) {
 			item.dataDesc = this.state.usageMin.name;
 			break;
 		case HIDItemLocalTag.UsageMaximum:
-			if (this.state.usagePage.usage == null)
+			if (this.state.usagePage.usage === null)
 				throw "Usage page " + this.state.usagePage.name + " does not contain usages";
 			item.usagePage = this.state.usagePage;
 
@@ -214,26 +214,26 @@ HIDRun.prototype.runItem = function (item) {
 			throw "Unsupported item tag during run: " + item.tag.name;
 	}
 	this.state.handleNewState();
-}
+};
 
 HIDRun.prototype.checkReportState = function () {
 /*
-    if (this.state.usageQueue.length == 0)
+    if (this.state.usageQueue.length === 0)
         throw "Report must have a usage";
 */
-    if (this.state.usagePage == null)
+    if (this.state.usagePage === null)
         throw "Report must have a usage page";
-    if (this.state.logicalMin == null)
+    if (this.state.logicalMin === null)
         throw "Report must have a logical minimum";
-    if (this.state.logicalMax == null)
+    if (this.state.logicalMax === null)
         throw "Report must have a logical maximum";
-    if (this.state.repSize == null)
+    if (this.state.repSize === null)
         throw "Report must have a size";
-    if (this.state.repCount == null)
+    if (this.state.repCount === null)
         throw "Report must have a count";
     if (this.collectionStack.length < 1)
         throw "Report must be in a collection";
-}
+};
 
 function HIDRunException(error, item) {
     this.error = error;
@@ -242,8 +242,8 @@ function HIDRunException(error, item) {
 
 HIDRun.prototype.run = function () {
     this.state.initState();
-    this.reports = new Array();
-    this.collectionStack = new Array();
+    this.reports = [];
+    this.collectionStack = [];
     this.useReportIDs = (this.countItemsByTag(this.descriptor.items, HIDItemGlobalTag.ReportID) > 0);
 
     for (var index in this.descriptor.items) {

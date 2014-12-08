@@ -37,6 +37,11 @@ function Toolbar() {
 	this.elem.id = "toolbar";
 	hidedit.appendChild(this.elem);
 
+    var toolbarOnClick = function() {toolbar.onClick(this); };
+    var toolbarOnMouseDown = function() {toolbar.onMouseDown(this); };
+    var toolbarOnMouseUp = function() {toolbar.onMouseUp(this); };
+    var toolbarOnMouseEnter = function() {toolbar.onMouseEnter(this); };
+    var toolbarOnMouseOut = function() {toolbar.onMouseOut(this); };
 	this.curButton = null;
     for (var typeName in ToolbarButton)
     {
@@ -48,11 +53,11 @@ function Toolbar() {
         buttonElem.className = "tbbtn";
         buttonElem.id = typeObj.name;
         buttonElem.title = typeObj.title;
-        buttonElem.onclick = function() {toolbar.onClick(this);};
-        buttonElem.onmousedown = function() {toolbar.onMouseDown(this);};
-        buttonElem.onmouseup = function() {toolbar.onMouseUp(this);};
-        buttonElem.onmouseenter = function() {toolbar.onMouseEnter(this);};
-        buttonElem.onmouseout = function() {toolbar.onMouseOut(this);};
+        buttonElem.onclick = toolbarOnClick;
+        buttonElem.onmousedown = toolbarOnMouseDown;
+        buttonElem.onmouseup = toolbarOnMouseUp;
+        buttonElem.onmouseenter = toolbarOnMouseEnter;
+        buttonElem.onmouseout = toolbarOnMouseOut;
         buttonElem.style.backgroundPosition = "-" + (typeObj.value*32) + "px 0px";
 
         this.elem.appendChild(buttonElem);
@@ -66,7 +71,7 @@ function Toolbar() {
 }
 
 Toolbar.prototype.clearState = function () {
-    if (this.curButton == null)
+    if (this.curButton === null)
         return;
     delClass(this.curButton, "pressed");
 };
@@ -78,11 +83,11 @@ Toolbar.prototype.enableButton = function (btn, enable) {
 		delClass(o, "disabled");
 	else
 		addClass(o, "disabled");
-}
+};
 
 Toolbar.prototype.isEnabled = function (btn) {
 	return !hasClass(btn, "disabled");
-}
+};
 
 Toolbar.prototype.onMouseDown = function (o) {
 	this.clearState();
@@ -90,34 +95,35 @@ Toolbar.prototype.onMouseDown = function (o) {
 		return;
 	this.curButton = o;
 	addClass(this.curButton, "pressed");
-}
+};
 
 Toolbar.prototype.onMouseUp = function (o) {
     this.clearState();
 	if (!this.isEnabled(o))
 		return;
     this.curButton = null;
-}
+};
 
 Toolbar.prototype.onMouseEnter = function (o) {
     this.clearState();
 	if (!this.isEnabled(o))
 		return;
     this.curButton = o;
-}
+};
 
 Toolbar.prototype.onMouseOut = function (o) {
     this.clearState();
 	if (!this.isEnabled(o))
 		return;
     this.curButton = null;
-}
+};
 
 Toolbar.prototype.onClick = function (o) {
 	if (!this.isEnabled(o))
 		return;
+	/* jshint -W061 */
 	eval('on' + o.id + 'Clicked()');
-}
+};
 
 function onNewClicked()
 {
@@ -244,7 +250,7 @@ function onAddItemOK() {
 
 function onDelItemClicked()
 {
-	if (treeView.selectedItem == null)
+	if (treeView.selectedItem === null)
 		return;
 
 	treeView.saveSelectionIndex();
@@ -254,7 +260,7 @@ function onDelItemClicked()
 }
 
 function onEditItemClicked() {
-	if (treeView.selectedItem == null)
+	if (treeView.selectedItem === null)
 		return;
 
 	var index = treeView.selectedItem.itemIndex;

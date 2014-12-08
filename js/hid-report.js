@@ -59,7 +59,7 @@ function HIDReportEntryAttributes(data) {
 
 HIDReportEntryAttributes.prototype.hasAttribute = function (attr) {
 	return (((this.data >> attr.bit) & 1) == attr.value);
-}
+};
 
 HIDReportEntryAttributes.prototype.makeDescription = function () {
 	var desc = "";
@@ -72,7 +72,7 @@ HIDReportEntryAttributes.prototype.makeDescription = function () {
 		}
 	}
 	return desc;
-}
+};
 
 function HIDReportEntry(attributes, usage, bits) {
     this.usage = usage;
@@ -87,12 +87,12 @@ function HIDReportEntry(attributes, usage, bits) {
     this.physicalMax = ;
 	unit, etc.
     */
-};
+}
 
 function HIDReport(type, id) {
     this.type = type;
     this.id = id;
-    this.entries = new Array();
+    this.entries = [];
 }
 
 HIDReport.prototype.addData = function (item, state) {
@@ -105,7 +105,7 @@ HIDReport.prototype.addData = function (item, state) {
 		this.entries.push(entry);
 	}
 	return attr.makeDescription();
-}
+};
 
 HIDReport.prototype.getBitSize = function () {
     var bits = 0;
@@ -114,13 +114,13 @@ HIDReport.prototype.getBitSize = function () {
         bits += entry.bits;
     }
     return bits;
-}
+};
 
 HIDReport.prototype.getByteSize = function () {
     return Math.floor((this.getBitSize() + 7) / 8);
-}
+};
 
 HIDReport.prototype.getID = function () {
 //    return this.state.repID;
-}
+};
 

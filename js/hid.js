@@ -104,7 +104,7 @@ function parseHIDItemSize(size) {
 function sizeForData(data) {
     if (data < 0)
         throw "Negative data";
-    if (data == 0)
+    if (data === 0)
         return 0;
     if (data < 256)
         return 1;
@@ -178,11 +178,11 @@ HIDItem.prototype.parse = function (stream) {
                 throw "Reserved item type encountered";
         }
 
-        var size = prefix.size;
-        if (size > 0)
-            this.data = hex2dec(stream.getBuffer(size));
-        else
+        if (prefix.size > 0) {
+            this.data = hex2dec(stream.getBuffer(prefix.size));
+        } else {
             this.data = 0;
+        }
     }
 };
 
@@ -194,11 +194,11 @@ HIDItem.prototype.pack = function (stream) {
 };
 
 function HIDDescriptor() {
-    this.items = new Array();
+    this.items = [];
 }
 
 HIDDescriptor.prototype.parse = function (stream) {
-    this.items = new Array();
+    this.items = [];
 
     while (!stream.atEnd())
     {

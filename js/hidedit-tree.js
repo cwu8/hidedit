@@ -41,14 +41,16 @@ Tree.prototype.show = function (descriptor) {
 	this.clear();
 	this.descriptor = descriptor;
 	var indent = 0;
+	var treeViewToggle = function () { treeView.toggleSelectItem(this); };
+	var treeViewSelect = function () { treeView.selectItem(this); onEditItemClicked(); };
 	for (var index in descriptor.items) {
 		var item = descriptor.items[index];
 
 		var itemElem = document.createElement('BUTTON');
 		item.elem = itemElem;
 		itemElem.className = "treeitem";
-		itemElem.onclick = function () { treeView.toggleSelectItem(this); };
-		itemElem.ondblclick = function () { treeView.selectItem(this); onEditItemClicked(); };
+		itemElem.onclick = treeViewToggle;
+		itemElem.ondblclick = treeViewSelect;
 		itemElem.itemIndex = index;
 
 		if (item.tag == HIDItemMainTag.EndCollection)
@@ -76,10 +78,10 @@ Tree.prototype.show = function (descriptor) {
 
 Tree.prototype.enableToolbar = function () {
 	toolbar.enableButton(ToolbarButton.AddItem, true);
-	var enable = (this.selectedItem != null);
+	var enable = (this.selectedItem !== null);
 	toolbar.enableButton(ToolbarButton.DelItem, enable);
 	toolbar.enableButton(ToolbarButton.EditItem, enable);
-}
+};
 
 Tree.prototype.selectIndex = function (index) {
 	if (this.root.childNodes.length < 1)
@@ -91,16 +93,16 @@ Tree.prototype.selectIndex = function (index) {
 	var item = this.root.childNodes[index];
 	if (this.selectedItem != item)
 		this.toggleSelectItem(this.root.childNodes[index]);
-}
+};
 
 Tree.prototype.toggleSelectItem = function (treeItem) {
 	var oldSelected = this.selectedItem;
-	if (this.selectedItem != null) {
+	if (this.selectedItem !== null) {
 		delClass(this.selectedItem, "selectedItem");
 		this.selectedItem = null;
 	}
 
-	if ((treeItem != null) && (treeItem != oldSelected)) {
+	if ((treeItem !== null) && (treeItem != oldSelected)) {
 		this.selectedItem = treeItem;
 		addClass(this.selectedItem, "selectedItem");
 	}
@@ -111,12 +113,12 @@ Tree.prototype.selectItem = function (treeItem) {
 	if (this.selectedItem == treeItem)
 		return;
 
-	if (this.selectedItem != null) {
+	if (this.selectedItem !== null) {
 		delClass(this.selectedItem, "selectedItem");
 		this.selectedItem = null;
 	}
 
-	if (treeItem != null) {
+	if (treeItem !== null) {
 		this.selectedItem = treeItem;
 		addClass(this.selectedItem, "selectedItem");
 	}
@@ -125,26 +127,26 @@ Tree.prototype.selectItem = function (treeItem) {
 
 Tree.prototype.setErrorItem = function (treeItem) {
 	var oldError = this.errorItem;
-	if (this.errorItem != null) {
+	if (this.errorItem !== null) {
 		delClass(this.errorItem, "errorItem");
 		this.errorItem = null;
 	}
 
-	if ((treeItem != null) && (treeItem != oldError)) {
+	if ((treeItem !== null) && (treeItem != oldError)) {
 		this.errorItem = treeItem;
 		addClass(this.errorItem, "errorItem");
 	}
 };
 
 Tree.prototype.saveSelectionIndex = function () {
-	if (treeView.selectedItem == null)
+	if (treeView.selectedItem === null)
 		this.savedSelectionIndex = null;
 	else
 		this.savedSelectionIndex = treeView.selectedItem.itemIndex;
 };
 
 Tree.prototype.restoreSelectionIndex = function () {
-	if (this.savedSelectionIndex != null)
+	if (this.savedSelectionIndex !== null)
 		treeView.selectIndex(this.savedSelectionIndex);
 };
 

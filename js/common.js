@@ -17,20 +17,6 @@
 */
 
 // Infrastructure:
-function loadScript(url) {
-	scriptState[url] = {};
-	scriptState[url].done = false;
-	scriptState[url].block = document.createElement('div');
-	loading.appendChild(scriptState[url].block);
-
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.src = url;
-	script.onreadystatechange = function () { onScriptLoaded(url); };
-	script.onload = function () { onScriptLoaded(url); };
-	document.body.appendChild(script);
-}
-
 function makeStruct(names) {
     names = names.split(' ');
     var count = names.length;
@@ -82,38 +68,38 @@ function cleanHex(data) {
 }
 
 function hasClass(item, className) {
-	var index = item.className.indexOf(" " + className + " ");
-	return (index >= 0);
+    var index = item.className.indexOf(" " + className + " ");
+    return (index >= 0);
 }
 
 function addClass(item, className) {
-	if (item.className.indexOf(className) >= 0)
-		return;
+    if (item.className.indexOf(className) >= 0)
+        return;
 
-	item.className += " " + className + " ";
+    item.className += " " + className + " ";
 }
 
 function delClass(item, className) {
-	var index = item.className.indexOf(" " + className + " ");
-	if (index < 0)
-		return;
+    var index = item.className.indexOf(" " + className + " ");
+    if (index < 0)
+        return;
 
-	item.className = item.className.substr(0, index) + item.className.substr(index + className.length + 2, item.className.length - (index + className.length + 2));
+    item.className = item.className.substr(0, index) + item.className.substr(index + className.length + 2, item.className.length - (index + className.length + 2));
 }
 
 function onDescriptorChanged() {
-	var run = new HIDRun(descriptor);
-	try {
-		run.run();
-	}
-	catch (runException) {
-		treeView.show(descriptor);
-		treeView.setErrorItem(runException.item.elem);
-		reportsView.showError(runException.error);
-		return;
-	}
-	treeView.show(descriptor);
-	reportsView.show(run.reports);
+    var run = new HIDRun(descriptor);
+    try {
+        run.run();
+    }
+    catch (runException) {
+        treeView.show(descriptor);
+        treeView.setErrorItem(runException.item.elem);
+        reportsView.showError(runException.error);
+        return;
+    }
+    treeView.show(descriptor);
+    reportsView.show(run.reports);
 }
 
 function writelog(str) {
@@ -127,67 +113,20 @@ function writelog(str) {
 var descriptor = null;
 
 // UI components
-var hidedit = document.getElementById("hidedit");
+var hidedit = document.getElementById('hidedit');
 var toolbar = null;
 var treeView = null;
 var reportsView = null;
 
-// Code components
-var scripts = [
-	'js/hid-stream.js',
-	'js/hut.js',
-	'js/hid-report.js',
-	'js/hid.js',
-	'js/hid-run-state.js',
-	'js/hid-run.js',
-	'js/hidedit-toolbar.js',
-	'js/hidedit-tree.js',
-	'js/hidedit-reports.js',
-	'js/hidedit-dialog.js'
-];
-var scriptState = {};
+document.addEventListener('DOMContentLoaded', function() {
+    var loading = document.getElementById('loadingText');
+    loading.parentElement.removeChild(loading);
 
-function onScriptLoaded(url) {
-	// Mark this script as loaded
-	if (scriptState[url].done) {
-		return;
-	}
-	scriptState[url].done = true;
+    // Init global state
+    descriptor = new HIDDescriptor();
 
-	// Update loading progress
-	scriptState[url].block.className = "done";
-
-	// Waiting for more scripts?
-	for (var i in scripts) {
-		if (!scriptState[scripts[i]].done) {
-			return;
-		}
-	}
-
-	// All scripts have loaded. Time for initialization
-	hidedit.removeChild(loading);
-	hidedit.removeChild(loadingText);
-
-	// Init global state
-	descriptor = new HIDDescriptor();
-
-	// Init UI components
-	toolbar = new Toolbar();
-	treeView = new Tree();
-	reportsView = new Reports();
-}
-
-// Create the loading UI
-var loadingText = document.createElement("P");
-loadingText.id = "loadingText";
-loadingText.textContent = "Loading HIDEdit, please wait...";
-hidedit.appendChild(loadingText);
-
-var loading = document.createElement("DIV");
-loading.id = "loading";
-hidedit.appendChild(loading);
-
-// Load the scripts
-for (var i in scripts) {
-	loadScript(scripts[i]);
-}
+    // Init UI components
+    toolbar = new Toolbar();
+    treeView = new Tree();
+    reportsView = new Reports();
+});

@@ -3,6 +3,7 @@ module.exports = function(grunt) {
         concat: {
             js: {
                 src: [
+                    'build/modernizr.js',
                     'js/*.js'
                 ],
                 dest: 'build/app.js'
@@ -18,6 +19,27 @@ module.exports = function(grunt) {
             css: {
                 src: '<%= concat.css.dest %>',
                 dest: 'dist/app.min.css'
+            }
+        },
+        modernizr: {
+            dist: {
+                devFile: 'bower_components/modernizr/modernizr.js',
+                outputFile: 'build/modernizr.js',
+                extra: {
+                    shiv: true,
+                    printshiv: false,
+                    load: false,
+                    mq: false,
+                    cssclasses: false
+                },
+                uglify: false,
+                tests: [
+                    'a_download',
+                    'file_api',
+                    'localstorage',
+                    'url_data_uri'
+                ],
+                parseFiles: false
             }
         },
         uglify: {
@@ -47,6 +69,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-modernizr');
 
-    grunt.registerTask('default', ['jshint', 'concat', 'cssmin', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'modernizr', 'concat', 'cssmin', 'uglify']);
 };

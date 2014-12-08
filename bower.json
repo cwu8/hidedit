@@ -1,0 +1,17 @@
+{
+  "name": "hidedit",
+  "version": "0.0.0",
+  "homepage": "https://github.com/cwu8/hidedit",
+  "authors": [
+    "Ilan Tayari <yonatanz@actcom.co.il>",
+    "Cheng Wu <cwu8@qq.com>"
+  ],
+  "description": "HID Report Descriptor Editor",
+  "license": "GPLv3",
+  "private": true,
+  "dependencies": {
+    "angular-bootstrap": "~0.12.0",
+    "bootstrap": "~3.3.1",
+    "modernizr": "~2.8.3"
+  }
+}

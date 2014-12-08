@@ -58,10 +58,10 @@ function Toolbar() {
         this.elem.appendChild(buttonElem);
     }
 
-    editItemDlg = new Dialog("Edit item", "dlg-edititem.html", new EditItemDialogUI(onEditItemOK));
+    editItemDlg = new Dialog("Edit item", "views/edititem.html", new EditItemDialogUI(onEditItemOK));
     editItemDlg.setSize(500, 300);
 
-    addItemDlg = new Dialog("Add item", "dlg-edititem.html", new EditItemDialogUI(onAddItemOK));
+    addItemDlg = new Dialog("Add item", "views/edititem.html", new EditItemDialogUI(onAddItemOK));
     addItemDlg.setSize(500, 300);
 }
 

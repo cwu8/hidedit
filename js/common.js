@@ -18,18 +18,17 @@
 
 // Infrastructure:
 function loadScript(url) {
-	scripts[url] = Array();
-	scripts[url].done = false;
-	scripts[url].block = document.createElement("DIV");
-	loading.appendChild(scripts[url].block);
+	scriptState[url] = {};
+	scriptState[url].done = false;
+	scriptState[url].block = document.createElement('div');
+	loading.appendChild(scriptState[url].block);
 
-	var head = document.getElementsByTagName('head')[0];
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
 	script.src = url;
 	script.onreadystatechange = function () { onScriptLoaded(url); };
 	script.onload = function () { onScriptLoaded(url); };
-	head.appendChild(script);
+	document.body.appendChild(script);
 }
 
 function makeStruct(names) {
@@ -117,6 +116,13 @@ function onDescriptorChanged() {
 	reportsView.show(run.reports);
 }
 
+function writelog(str) {
+    var log = document.getElementById('log');
+    var text = document.createElement('TextNode');
+    text.textContent = str;
+    log.appendChild(text);
+}
+
 // Program's global state
 var descriptor = null;
 
@@ -127,32 +133,35 @@ var treeView = null;
 var reportsView = null;
 
 // Code components
-var scripts = {
-	"hid-stream.js": null,
-	"hut.js": null,
-	"hid-report.js": null,
-	"hid.js": null,
-	"hid-run-state.js": null,
-	"hid-run.js": null,
-	"hidedit-toolbar.js": null,
-	"hidedit-tree.js": null,
-	"hidedit-reports.js": null,
-	"hidedit-dialog.js": null
-};
+var scripts = [
+	'js/hid-stream.js',
+	'js/hut.js',
+	'js/hid-report.js',
+	'js/hid.js',
+	'js/hid-run-state.js',
+	'js/hid-run.js',
+	'js/hidedit-toolbar.js',
+	'js/hidedit-tree.js',
+	'js/hidedit-reports.js',
+	'js/hidedit-dialog.js'
+];
+var scriptState = {};
 
 function onScriptLoaded(url) {
 	// Mark this script as loaded
-	if (scripts[url].done)
+	if (scriptState[url].done) {
 		return;
-	scripts[url].done = true;
+	}
+	scriptState[url].done = true;
 
 	// Update loading progress
-	scripts[url].block.className = "done";
+	scriptState[url].block.className = "done";
 
 	// Waiting for more scripts?
-	for (var scriptUrl in scripts) {
-		if (!scripts[scriptUrl].done)
+	for (var i in scripts) {
+		if (!scriptState[scripts[i]].done) {
 			return;
+		}
 	}
 
 	// All scripts have loaded. Time for initialization
@@ -178,7 +187,7 @@ var loading = document.createElement("DIV");
 loading.id = "loading";
 hidedit.appendChild(loading);
 
-
 // Load the scripts
-for (var scriptUrl in scripts)
-	loadScript(scriptUrl);
+for (var i in scripts) {
+	loadScript(scripts[i]);
+}
